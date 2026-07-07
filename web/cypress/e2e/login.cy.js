@@ -11,22 +11,22 @@ describe('template spec', () => {
       .should('be.visible')
       .and('have.text', 'Olá QA, esse é o seu Dojo para aprender Automação de Testes.')
   })
-  
+
   it('não Deve logar com senha incorreta', () => {
     cy.START()
     cy.submetLoginForm('papito@webdojo.com', 'katana321')
 
     cy.contains('Acesso negado! Tente novamente.')
-    .should('be.visible')
+      .should('be.visible')
   })
-  
-    it('não Deve logar com mail que não existe', () => {
+
+  it('não Deve logar com mail que não existe', () => {
     cy.START()
     cy.submetLoginForm('papito@webdoja.com', 'katana123')
 
     cy.contains('button', 'Entrar').click()
 
     cy.contains('Acesso negado! Tente novamente.')
-    .should('be.visible')
+      .should('be.visible')
   })
 })
