@@ -25,15 +25,14 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import 'cypress-real-events'
 import './actions/consultancy.actions'
+import { getFormattedDate } from './utils'
 
 Cypress.Commands.add('acessarAplicacao', () => {
-    cy.viewport(1440, 900)
-    cy.visit('http://localhost:3000')
+    cy.visit('/')
 })
 
 Cypress.Commands.add('submeterLogin', (email, senha) => {
-    cy.viewport(1440, 900)
-    cy.visit('http://localhost:3000')
+    cy.visit('/')
     cy.get('#email').type(email)
     cy.get('#password').type(senha)
     cy.contains('button', 'Entrar').click()
@@ -50,7 +49,22 @@ Cypress.Commands.add('goTo', (buttonName, pageTitle) => {
 
 
 //helpers
-Cypress.Commands.add('Login', () => {
-     cy.acessarAplicacao()
+//esse comands aproveita o token do usuário de demonstração do WebDojo para logar sem precisar da interface de login.
+Cypress.Commands.add('Login', (ui = false) => {
+    if (ui === true) {
+        cy.acessarAplicacao()
         cy.submeterLogin('papito@webdojo.com', 'katana123')
+    } else {
+        // Token fixo do usuário de demonstração do WebDojo.
+        const token = 'e1033d63a53fe66c0fd3451c7fd8f617'
+        const loginDate = getFormattedDate()
+
+        const domain = new URL(Cypress.config('baseUrl')).hostname
+        cy.setCookie('login_date', loginDate, { domain, path: '/' })
+        cy.visit('/dashboard', {
+            onBeforeLoad(win) {
+                win.localStorage.setItem('token', token)
+            }
+        })
+    }
 })

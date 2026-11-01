@@ -1,6 +1,6 @@
+import { getFormattedDate } from '../support/utils'
+
 describe('Login', () =>{
-
-
    it('deve logar com sucesso', () => {
     cy.acessarAplicacao()
     cy.submeterLogin('papito@webdojo.com', 'katana123')
@@ -12,6 +12,17 @@ describe('Login', () =>{
     cy.get('[data-cy="welcome-message"]')
       .should('be.visible')
       .and('contain.text', 'Olá QA, esse é o seu Dojo para aprender Automação de Testes.')
+
+    cy.getCookie('login_date')
+      .should('exist')
+      .and((cookie) => {
+        expect(cookie.value).to.equal(getFormattedDate())
+      })
+
+    cy.window().then((win) => {
+      const token = win.localStorage.getItem('token')
+      expect(token).to.match(/^[a-f0-9]{32}$/i)
+    })
 
  })
 

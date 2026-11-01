@@ -19,3 +19,8 @@ package-lock.json
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# Cypress: evidências e arquivos gerados
+/cypress/videos/
+/cypress/downloads/
+/cypress/screenshots/
